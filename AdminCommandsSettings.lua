@@ -1,3 +1,5 @@
+-- This is a module Script file located in ServerScriptService --
+
 local panel = {}
 
 ---------------------
@@ -18,24 +20,23 @@ local panel = {}
 panel.settings  = {
 	Main = {
 		["chatPrefix"] = ".",
-		
+
 		["groupId"] = 3353368,
 		["moderator"] = {},
 		["admin"] = {},
 		["owner"] = {255},
-		
+
 		["moderatorUser"] = {},
 		["adminUser"] = {},
 		["ownerUser"] = {},
-		
+
 		["modPerms"] = {"Warn", "Shout", "Rejoin", "TpBring", "TpTo"},
 		["adminPerms"] = {"Kick", "Ban", "Warn", "Shout", "Rejoin", "Banlist", "TpTo", "TpBring", "ClearTools"},
 		["ownerPerms"] = {"Kick", "Ban", "Warn", "Shout", "Rejoin", "Banlist", "TpTo", "TpBring", "ClearTools"},
 	},
 	DiscordWebhook = {
-		["enabled"] = false,
-		["URL"] = "",
-		["username"] = "",
+		["enabled"] = true,
+		["URL"] = "https://discord.com/api/webhooks/847241352596422706/8lAbXMT9UW2HrP9QZ_9orDMykfzl633vlP38NHgCDSwYqegXFWqtfXK9w21I16oASR4_",
 	}
 }
 

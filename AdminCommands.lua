@@ -1,3 +1,5 @@
+-- This is a regular Script file located in ServerScriptService --
+
 local main = require(game.ServerScriptService.AdminCommandSettings)
 
 ---------------------
