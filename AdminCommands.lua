@@ -28,7 +28,6 @@ local ownerPerms = main.settings.Main.ownerPerms
 
 local logEnabled = main.settings.DiscordWebhook.enabled
 local logURL = main.settings.DiscordWebhook.URL
-local logUser = main.settings.DiscordWebhook.username
 
 ------------------------
 -- Permission Checker --
@@ -69,17 +68,17 @@ local function onPlayerChatted(player, message)
 	if startsWith(message, chatPrefix) == true then
 		message = message:sub(chatPrefix:len()+1)
 		local args = splitMessage(message)
-		local command = args[0] or args[1]
+		local command = args[1]
 
 		if command == nil then
 			return;
 		end
-		
+
 		-- TpTo Command
 		if command:lower() == "to" or command:lower() == "tpto" then
 			if hasPermissionToUseCommand(player, "TpTo") == true then
 				print(player.Name.." has permission to do TpTo!")
-				local Target = FindTarget(command, args)
+				local Target = FindPlayer(args[2])
 				if Target == nil then
 					print(player.Name.." didn't include a Target!")
 					-- notify(player, "You didn't include a Target!")
@@ -93,12 +92,12 @@ local function onPlayerChatted(player, message)
 				end
 			end
 		end
-		
+
 		--TpBring Command
 		if command:lower() == "bring" or command:lower() == "tpbring" or command:lower() == "tptome" then
 			if hasPermissionToUseCommand(player, "TpBring") == true then
 				print(player.Name.." has permission to do TpBring!")
-				local Target = FindTarget(command, args)
+				local Target = FindPlayer(args[2])
 				if Target == nil then
 					print(player.Name.." didn't include a Target!")
 					-- notify(player, "You didn't include a Target!")
@@ -113,29 +112,48 @@ local function onPlayerChatted(player, message)
 			end
 		end
 
-				--ClearTools
-				if command:lower() == "cleartools" or command:lower() == "removetools" or command:lower() == "clrtools" then
-					if hasPermissionToUseCommand(player, "ClearTools") == true then
-						print(player.Name.." has permission to do ClearTools!")
-						local Target = FindTarget(command, args)
-						if Target == nil then
-							print(player.Name.." didn't include a Target!")
-							-- notify(player, "You didn't include a Target!")
-						else 		
-							if Target and Target:FindFirstChildOfClass("Backpack") then
-								Target:FindFirstChildOfClass("Backpack"):ClearAllChildren()
-								for i,v in pairs(Target.Character:GetChildren()) do
-									if v:IsA("Tool") then
-										v:Destroy()
-									end
-								end
-								sendLogMessage(player, player.Name.." removed all of **"..Target.Name.."**'s tools.")
-								print(player.Name.." removed all of **"..Target.Name.."**'s tools.")
+		--ClearTools
+		if command:lower() == "cleartools" or command:lower() == "removetools" or command:lower() == "clrtools" then
+			if hasPermissionToUseCommand(player, "ClearTools") == true then
+				print(player.Name.." has permission to do ClearTools!")
+				local Target = FindPlayer(args[2])
+				if Target == nil then
+					print(player.Name.." didn't include a Target!")
+					-- notify(player, "You didn't include a Target!")
+				else 		
+					if Target and Target:FindFirstChildOfClass("Backpack") then
+						Target:FindFirstChildOfClass("Backpack"):ClearAllChildren()
+						for i,v in pairs(Target.Character:GetChildren()) do
+							if v:IsA("Tool") then
+								v:Destroy()
 							end
 						end
+						sendLogMessage(player, player.Name.." removed all of **"..Target.Name.."**'s tools.")
+						print(player.Name.." removed all of "..Target.Name.."'s tools.")
 					end
 				end
-		
+			end
+		end
+
+		--Kick
+		if command:lower() == "kick" then
+			if hasPermissionToUseCommand(player, "Kick") == true then
+				print(player.Name.." has permission to do Kick!")
+				local Target = FindPlayer(args[2])
+				if Target == nil then
+					print(player.Name.." didn't include a Target!")
+					-- notify(player, "You didn't include a Target!")
+				else 		
+					table.remove(args, 1)
+					table.remove(args, 1)
+					local reason = table.concat(args, " ")
+					sendLogMessage(player, player.Name.." kicked **"..Target.Name.."** with the reason: '"..reason.."'.")
+					print(player.Name.." kicked "..Target.Name.." with the reason: '"..reason.."'.")
+					Target:Kick("You have been kicked for: "..reason)
+				end
+			end
+		end
+
 	end
 end
 
@@ -148,20 +166,6 @@ game.Players.PlayerAdded:Connect(onPlayerAdded)
 ---------------------
 -- Misc. Functions --
 ---------------------
-
-function FindTarget(command, args)
-    local Target;
-    if(command == args[0]) then 
-        if args[1] ~= nil then
-            Target = FindPlayer(args[1])
-        end
-    else
-        if args[2] ~= nil then
-            Target = FindPlayer(args[2])
-        end
-    end
-    return Target
-end
 
 function FindPlayer(Name)
 	for i, Player in pairs(Players:GetPlayers()) do
@@ -183,20 +187,23 @@ function getThumbnailURL(player)
 end
 
 function sendLogMessage(player, message)
-	if logEnabled == true and logURL ~= nil and logUser ~= nil then
+	if logEnabled == true and logURL ~= nil then
 		local MessageData = {
-			["Username"] = logUser,
-			["avatar_url"] = getThumbnailURL(player),
 			["embeds"] = {{
 				["title"] = "Moderation Logs",
 				["description"] = message,
-				["color"] = tonumber(0xffffff)
+				["color"] = tonumber(0xffffff),
+				["thumbnail"] = {
+					["url"] = "https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&username="..player.Name,
+				},
+				["footer"] = {
+					["text"] = "Provided by OpenSource Admin Commands by captain_bboy"
+				}
 			}},
-			["footer"] = {
-				["text"] = "Provided by OpenSource Admin Commands by captain_bboy"
-			}
 		}		
 		MessageData = HttpService:JSONEncode(MessageData)
+		print(logURL)
+		print(MessageData)
 		HttpService:PostAsync(logURL, MessageData)
 	end
 end
