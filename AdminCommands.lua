@@ -103,8 +103,6 @@ local function onPlayerChatted(player, message)
 					print(player.Name.." didn't include a Target!")
 					-- notify(player, "You didn't include a Target!")
 				else 
-					local chosen = game.Players:FindFirstChild(Target)
-
 					if player and player.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil and Target and Target.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil then
 						Target.Character.HumanoidRootPart.CFrame = CFrame.new(player.Character.HumanoidRootPart.Position) * CFrame.new(math.random(1,5), 3, math.random(1, 5))
 						-- notify(player, "You have brought "..Target.Name.." to you")
@@ -114,6 +112,29 @@ local function onPlayerChatted(player, message)
 				end
 			end
 		end
+
+				--ClearTools
+				if command:lower() == "cleartools" or command:lower() == "removetools" or command:lower() == "clrtools" then
+					if hasPermissionToUseCommand(player, "ClearTools") == true then
+						print(player.Name.." has permission to do ClearTools!")
+						local Target = FindTarget(command, args)
+						if Target == nil then
+							print(player.Name.." didn't include a Target!")
+							-- notify(player, "You didn't include a Target!")
+						else 		
+							if Target and Target:FindFirstChildOfClass("Backpack") then
+								Target:FindFirstChildOfClass("Backpack"):ClearAllChildren()
+								for i,v in pairs(Target.Character:GetChildren()) do
+									if v:IsA("Tool") then
+										v:Destroy()
+									end
+								end
+								sendLogMessage(player, player.Name.." removed all of **"..Target.Name.."**'s tools.")
+								print(player.Name.." removed all of **"..Target.Name.."**'s tools.")
+							end
+						end
+					end
+				end
 		
 	end
 end
