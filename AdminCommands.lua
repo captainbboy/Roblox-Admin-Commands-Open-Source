@@ -79,7 +79,39 @@ local function onPlayerChatted(player, message)
 		if command:lower() == "to" or command:lower() == "tpto" then
 			if hasPermissionToUseCommand(player, "TpTo") == true then
 				print(player.Name.." has permission to do TpTo!")
-				
+				local Target = FindTarget(command, args)
+				if Target == nil then
+					print(player.Name.." didn't include a Target!")
+					-- notify(player, "You didn't include a Target!")
+				else 
+					if Target and Target.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil and player and player.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil then
+						player.Character.HumanoidRootPart.CFrame = CFrame.new(Target.Character.HumanoidRootPart.Position) * CFrame.new(math.random(1,5), 3, math.random(1, 5))
+						-- notify(player, "You teleported to "..Target.Name)
+						sendLogMessage(player, player.Name.." teleported to **"..Target.Name.."**")
+						print(player.Name.." teleported to "..Target.Name)
+					end
+				end
+			end
+		end
+		
+		--TpBring Command
+		if command:lower() == "bring" or command:lower() == "tpbring" or command:lower() == "tptome" then
+			if hasPermissionToUseCommand(player, "TpBring") == true then
+				print(player.Name.." has permission to do TpBring!")
+				local Target = FindTarget(command, args)
+				if Target == nil then
+					print(player.Name.." didn't include a Target!")
+					-- notify(player, "You didn't include a Target!")
+				else 
+					local chosen = game.Players:FindFirstChild(Target)
+
+					if player and player.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil and Target and Target.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil then
+						Target.Character.HumanoidRootPart.CFrame = CFrame.new(player.Character.HumanoidRootPart.Position) * CFrame.new(math.random(1,5), 3, math.random(1, 5))
+						-- notify(player, "You have brought "..Target.Name.." to you")
+						sendLogMessage(player, player.Name.." brought **"..Target.Name.."** to them")
+						print(player.Name.." brought "..Target.Name.." to them")
+					end
+				end
 			end
 		end
 		
@@ -95,6 +127,30 @@ game.Players.PlayerAdded:Connect(onPlayerAdded)
 ---------------------
 -- Misc. Functions --
 ---------------------
+
+function FindTarget(command, args)
+    local Target;
+    if(command == args[0]) then 
+        if args[1] ~= nil then
+            Target = FindPlayer(args[1])
+        end
+    else
+        if args[2] ~= nil then
+            Target = FindPlayer(args[2])
+        end
+    end
+    return Target
+end
+
+function FindPlayer(Name)
+	for i, Player in pairs(Players:GetPlayers()) do
+		if startsWith(Player.Name:lower(), Name:lower()) then
+			return Player
+		end
+	end
+
+	return nil
+end
 
 -- Fetch the thumbnail
 function getThumbnailURL(player)
