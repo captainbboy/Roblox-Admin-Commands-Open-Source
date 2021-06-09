@@ -284,7 +284,9 @@ local function onPlayerChatted(player, message)
 				end						
 				-- notify(player, "You gave an invalid username!")
 			else
+				local wasUnBanned = false;
 				if arrayHas(bansTable, UserID) then
+					wasUnBanned = true;
 					table.remove(bansTable, UserID)
 				end
 				
@@ -307,10 +309,14 @@ local function onPlayerChatted(player, message)
 							warn(err2)
 						end
 					else 
-						if devMode then 
-							print(args[2].." isn't banned!")
-						end						
-						-- notify(player, args[2].." isn't banned!")
+						if wasUnBanned then
+							return
+						else
+							if devMode then 
+								print(args[2].." isn't banned!")
+							end						
+							-- notify(player, args[2].." isn't banned!")							
+						end
 					end
 				else 
 					print("ERROR retrieving from bansStore!")
