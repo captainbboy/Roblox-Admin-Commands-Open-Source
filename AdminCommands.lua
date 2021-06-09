@@ -21,14 +21,17 @@ local chatPrefix = main.settings.Main.chatPrefix
 local groupId = main.settings.Main.groupId
 local moderator = main.settings.Main.moderator
 local admin = main.settings.Main.admin
+local manager = main.settings.Main.manager
 local owner = main.settings.Main.owner
 
 local modUser = main.settings.Main.moderatorUser
 local adminUser = main.settings.Main.adminUser
+local managerUser = main.settings.Main.managerUser
 local ownerUser = main.settings.Main.ownerUser
 
 local modPerms = main.settings.Main.modPerms
 local adminPerms = main.settings.Main.adminPerms
+local managerPerms = main.settings.Main.managerPerms
 local ownerPerms = main.settings.Main.ownerPerms
 
 local logEnabled = main.settings.DiscordWebhook.enabled
@@ -61,6 +64,12 @@ function hasPermissionToUseCommand(player, command)
 				end
 				return true
 			end
+			if arrayHas(manager, role) and arrayHas(managerPerms, command) then
+				if devMode then 
+					print(player.Name.." has permission to do "..command.."!")
+				end
+				return true
+			end
 			if arrayHas(owner, role) and arrayHas(ownerPerms, command) then
 				if devMode then 
 					print(player.Name.." has permission to do "..command.."!")
@@ -76,6 +85,12 @@ function hasPermissionToUseCommand(player, command)
 		return true
 	end
 	if arrayHas(adminUser, player.UserId) and arrayHas(adminPerms, command) then
+		if devMode then 
+			print(player.Name.." has permission to do "..command.."!")
+		end
+		return true
+	end
+	if arrayHas(managerUser, player.UserId) and arrayHas(managerPerms, command) then
 		if devMode then 
 			print(player.Name.." has permission to do "..command.."!")
 		end
