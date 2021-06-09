@@ -121,231 +121,200 @@ local function onPlayerChatted(player, message)
 		
 		-- Base Command:
 		local cmd = "TESTING"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, cmd) == true then
-				if(checkParameters(player, args, cmd)) then
-					
-				end
-			end
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			
 		end
 		
 		-- TpTo Command
 		local cmd = "TpTo"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, cmd) == true then
-				if(checkParameters(player, args, cmd)) then
-					local Target = FindPlayer(args[2])
-					if Target == nil then
-						if devMode then
-							print(player.Name.." didn't include a Target!")
-						end
-						-- notify(player, "You didn't include a Target!")
-					else 
-						if Target and Target.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil and player and player.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil then
-							player.Character.HumanoidRootPart.CFrame = CFrame.new(Target.Character.HumanoidRootPart.Position) * CFrame.new(math.random(1,5), 3, math.random(1, 5))
-							-- notify(player, "You teleported to "..Target.Name)
-							sendLogMessage(player, player.Name.." teleported to **"..Target.Name.."**", cmd)
-						end
-					end
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			local Target = FindPlayer(args[2])
+			if Target == nil then
+				if devMode then
+					print(player.Name.." didn't include a Target!")
+				end
+				-- notify(player, "You didn't include a Target!")
+			else 
+				if Target and Target.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil and player and player.Character ~= nil and player.Character:FindFirstChild("HumanoidRootPart") ~= nil then
+					player.Character.HumanoidRootPart.CFrame = CFrame.new(Target.Character.HumanoidRootPart.Position) * CFrame.new(math.random(1,5), 3, math.random(1, 5))
+					-- notify(player, "You teleported to "..Target.Name)
+					sendLogMessage(player, player.Name.." teleported to **"..Target.Name.."**", cmd)
 				end
 			end
 		end
 
 		--TpBring Command
 		local cmd = "TpBring"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, "TpBring") == true then
-				local Target = FindPlayer(args[2])
-				if Target == nil then
-					if devMode then 
-						print(player.Name.." didn't include a Target!")
-					end					
-					-- notify(player, "You didn't include a Target!")
-				else 
-					if player and player.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil and Target and Target.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil then
-						Target.Character.HumanoidRootPart.CFrame = CFrame.new(player.Character.HumanoidRootPart.Position) * CFrame.new(math.random(1,5), 3, math.random(1, 5))
-						-- notify(player, "You have brought "..Target.Name.." to you")
-						sendLogMessage(player, player.Name.." brought **"..Target.Name.."** to them", cmd)
-					end
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			local Target = FindPlayer(args[2])
+			if Target == nil then
+				if devMode then 
+					print(player.Name.." didn't include a Target!")
+				end					
+				-- notify(player, "You didn't include a Target!")
+			else 
+				if player and player.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil and Target and Target.Character ~= nil and Target.Character:FindFirstChild("HumanoidRootPart") ~= nil then
+					Target.Character.HumanoidRootPart.CFrame = CFrame.new(player.Character.HumanoidRootPart.Position) * CFrame.new(math.random(1,5), 3, math.random(1, 5))
+					-- notify(player, "You have brought "..Target.Name.." to you")
+					sendLogMessage(player, player.Name.." brought **"..Target.Name.."** to them", cmd)
 				end
 			end
 		end
 
 		--ClearTools
 		local cmd = "ClearTools"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, cmd) == true then
-				if(checkParameters(player, args, cmd)) then
-					local Target = FindPlayer(args[2])
-					if Target == nil then
-						if devMode then 
-							print(player.Name.." didn't include a Target!")
-						end
-						-- notify(player, "You didn't include a Target!")
-					else 		
-						if Target and Target:FindFirstChildOfClass("Backpack") then
-							Target:FindFirstChildOfClass("Backpack"):ClearAllChildren()
-							for i,v in pairs(Target.Character:GetChildren()) do
-								if v:IsA("Tool") then
-									v:Destroy()
-								end
-							end
-							sendLogMessage(player, player.Name.." removed all of **"..Target.Name.."**'s tools.", cmd)
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			local Target = FindPlayer(args[2])
+			if Target == nil then
+				if devMode then 
+					print(player.Name.." didn't include a Target!")
+				end
+				-- notify(player, "You didn't include a Target!")
+			else 		
+				if Target and Target:FindFirstChildOfClass("Backpack") then
+					Target:FindFirstChildOfClass("Backpack"):ClearAllChildren()
+					for i,v in pairs(Target.Character:GetChildren()) do
+						if v:IsA("Tool") then
+							v:Destroy()
 						end
 					end
+					sendLogMessage(player, player.Name.." removed all of **"..Target.Name.."**'s tools.", cmd)
 				end
 			end
 		end
 
 		--Kick
 		local cmd = "Kick"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, cmd) == true then
-				if(checkParameters(player, args, cmd)) then
-					local Target = FindPlayer(args[2])
-					if Target == nil then
-						if devMode then 
-							print(player.Name.." didn't include a Target!")
-						end						
-						-- notify(player, "You didn't include a Target!")
-					else 		
-						table.remove(args, 1)
-						table.remove(args, 1)
-						local reason = table.concat(args, " ")
-						if reason == nil or reason == "" then
-							reason = "Not provided"
-						end
-						sendLogMessage(player, player.Name.." kicked **"..Target.Name.."** with the reason: '"..reason.."'.", cmd)
-						Target:Kick("You have been kicked for: "..reason)
-					end
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			local Target = FindPlayer(args[2])
+			if Target == nil then
+				if devMode then 
+					print(player.Name.." didn't include a Target!")
+				end						
+				-- notify(player, "You didn't include a Target!")
+			else 		
+				table.remove(args, 1)
+				table.remove(args, 1)
+				local reason = table.concat(args, " ")
+				if reason == nil or reason == "" then
+					reason = "Not provided"
 				end
+				sendLogMessage(player, player.Name.." kicked **"..Target.Name.."** with the reason: '"..reason.."'.", cmd)
+				Target:Kick("You have been kicked for: "..reason)
 			end
 		end
 		
 		--Ban
 		local cmd = "Ban"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, cmd) == true then
-				if(checkParameters(player, args, cmd)) then
-					local Target = FindPlayer(args[2])
-					if Target == nil then
-						if devMode then 
-							print(player.Name.." didn't include a Target!")
-						end						
-						-- notify(player, "You didn't include a Target!")
-					else
-						table.insert(bansTable, Target.UserId)
-						table.remove(args, 1)
-						table.remove(args, 1)
-						local reason = table.concat(args, " ")
-						if reason == nil or reason == "" then
-							reason = "Not provided"
-						end
-						sendLogMessage(player, player.Name.." banned **"..Target.Name.."** with the reason: '"..reason.."'.", cmd)
-						Target:Kick("You have been banned for: "..reason)
-					end
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			local Target = FindPlayer(args[2])
+			if Target == nil then
+				if devMode then 
+					print(player.Name.." didn't include a Target!")
+				end						
+				-- notify(player, "You didn't include a Target!")
+			else
+				table.insert(bansTable, Target.UserId)
+				table.remove(args, 1)
+				table.remove(args, 1)
+				local reason = table.concat(args, " ")
+				if reason == nil or reason == "" then
+					reason = "Not provided"
 				end
+				sendLogMessage(player, player.Name.." banned **"..Target.Name.."** with the reason: '"..reason.."'.", cmd)
+				Target:Kick("You have been banned for: "..reason)
 			end
 		end
 		
 		--PermBan
 		local cmd = "PermBan"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, cmd) == true then
-				if(checkParameters(player, args, cmd)) then
-					local Target = FindPlayer(args[2])
-					if Target == nil then
-						local userid = getUserIdFromUsername(args[2])
-						if userid then
-							Target = {
-								["Name"] = args[2],
-								["UserId"] = userid,
-								["isFAKE"] = true;
-							}							
-						end
-					end
-					if Target == nil then
-						if devMode then 
-							print(player.Name.." didn't include a Target!")
-						end						
-						-- notify(player, "You didn't include a Target!")
-					else						
-						table.remove(args, 1)
-						table.remove(args, 1)
-						local reason = table.concat(args, " ")
-						if reason == nil or reason == "" then
-							reason = "Not provided"
-						end
-						
-						local banTable = {
-							["isPerm"] = true,
-							["reason"] = reason
-						}
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			local Target = FindPlayer(args[2])
+			if Target == nil then
+				local userid = getUserIdFromUsername(args[2])
+				if userid then
+					Target = {
+						["Name"] = args[2],
+						["UserId"] = userid,
+						["isFAKE"] = true;
+					}							
+				end
+			end
+			if Target == nil then
+				if devMode then 
+					print(player.Name.." didn't include a Target!")
+				end						
+				-- notify(player, "You didn't include a Target!")
+			else						
+				table.remove(args, 1)
+				table.remove(args, 1)
+				local reason = table.concat(args, " ")
+				if reason == nil or reason == "" then
+					reason = "Not provided"
+				end
+				
+				local banTable = {
+					["isPerm"] = true,
+					["reason"] = reason
+				}
 
-						local success, err = pcall(function()
-							banStore:SetAsync(Target.UserId, banTable)
-						end)
+				local success, err = pcall(function()
+					banStore:SetAsync(Target.UserId, banTable)
+				end)
 
-						if success then
-							sendLogMessage(player, player.Name.." permanently banned **"..Target.Name.." ("..Target.UserId..")** with the reason: '"..reason.."'.", cmd)
-							if Target.isFAKE ~= true then
-								Target:Kick("You have been permanently banned for: '"..reason.."'")
-							end
-						else 
-							print("ERROR saving to bansStore!")
-							warn(err)
-						end
+				if success then
+					sendLogMessage(player, player.Name.." permanently banned **"..Target.Name.." ("..Target.UserId..")** with the reason: '"..reason.."'.", cmd)
+					if Target.isFAKE ~= true then
+						Target:Kick("You have been permanently banned for: '"..reason.."'")
 					end
+				else 
+					print("ERROR saving to bansStore!")
+					warn(err)
 				end
 			end
 		end
 		
 		--UnBan
 		local cmd = "UnBan"
-		if isCommand(command, cmd) then
-			if hasPermissionToUseCommand(player, cmd) == true then
-				if(checkParameters(player, args, cmd)) then
-					local UserID = getUserIdFromUsername(args[2])
-					if UserID == nil then
-						if devMode then 
-							print(player.Name.." gave an invalid username!")
-						end						
-						-- notify(player, "You gave an invalid username!")
-					else
-						if arrayHas(bansTable, UserID) then
-							table.remove(bansTable, UserID)
-						end
-						
-						local banInfo
-						local success, err = pcall(function()
-							banInfo = banStore:GetAsync(UserID)
+		if isCommand(command, cmd) and hasPermissionToUseCommand(player, cmd) == true and checkParameters(player, args, cmd) then
+			local UserID = getUserIdFromUsername(args[2])
+			if UserID == nil then
+				if devMode then 
+					print(player.Name.." gave an invalid username!")
+				end						
+				-- notify(player, "You gave an invalid username!")
+			else
+				if arrayHas(bansTable, UserID) then
+					table.remove(bansTable, UserID)
+				end
+				
+				local banInfo
+				local success, err = pcall(function()
+					banInfo = banStore:GetAsync(UserID)
+				end)
+
+				if success then
+					if banInfo ~= nil then
+						local success2, err2 = pcall(function()
+							banInfo = banStore:RemoveAsync(UserID)
 						end)
 
-						if success then
-							if banInfo ~= nil then
-								local success2, err2 = pcall(function()
-									banInfo = banStore:RemoveAsync(UserID)
-								end)
-
-								if success2 then
-									sendLogMessage(player, player.Name.." unbanned **"..args[2].."**.", cmd)
-									-- notify(player, "You have successfully unbanned "..args[2]..".")
-								else
-									print("ERROR removing from bansStore!")
-									warn(err2)
-								end
-							else 
-								if devMode then 
-									print(args[2].." isn't banned!")
-								end						
-								-- notify(player, args[2].." isn't banned!")
-							end
-						else 
-							print("ERROR retrieving from bansStore!")
-							warn(err)
+						if success2 then
+							sendLogMessage(player, player.Name.." unbanned **"..args[2].."**.", cmd)
+							-- notify(player, "You have successfully unbanned "..args[2]..".")
+						else
+							print("ERROR removing from bansStore!")
+							warn(err2)
 						end
-						
+					else 
+						if devMode then 
+							print(args[2].." isn't banned!")
+						end						
+						-- notify(player, args[2].." isn't banned!")
 					end
+				else 
+					print("ERROR retrieving from bansStore!")
+					warn(err)
 				end
 			end
 		end
